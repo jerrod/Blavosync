@@ -1,50 +1,3 @@
-namespace :remote do
-  # desc <<-DESC
-  #   [capistrano-extensions] Uploads the backup file downloaded from local:backup_db (specified via the FROM env variable),
-  #   copies it to the remote environment specified by RAILS_ENV, and imports (via mysql command line tool) it back into the
-  #   remote database.
-  # DESC
-  # task :restore_db, :roles => :db do
-  #   from = ENV['FROM'] || 'production'
-  #   env  = ENV['RESTORE_ENV'] || 'development'
-  #
-  #   db = YAML.load_file(local_db_conf(from))[from]
-  #   # print db.to_yaml
-  #   pass_str = pluck_pass_str(db)
-  #
-  #   puts "\033[1;42m Restoring database backup to #{rails_env} environment \033[0m"
-  #   if deployable_environments.include?(rails_env.to_sym)
-  #     generate_remote_db_backup if store_remote_backups
-  #
-  #     # remote environment
-  #     local_backup_file = local_db_backup_file(:timestamp => most_recent_local_backup(env, 'db'), :env => env) + ".#{zip_ext}"
-  #     remote_file       = "#{shared_path}/restore_#{env}_db.sql"
-  #
-  #     if !File.exists?(local_backup_file)
-  #       puts "Could not find backup file: #{local_backup_file}"
-  #       exit 1
-  #     end
-  #     upload(local_backup_file, "#{remote_file}.#{zip_ext}", :via=> :scp) do|ch, name, sent, total|
-  #       print " \r\033[1;42m  #{File.basename(name)}: #{sent}/#{total} -- #{(sent.to_f * 100 / total.to_f).to_i}% \033[0m"
-  #     end
-  #
-  #     pass_str = pluck_pass_str(db)
-  #     run "#{unzip} -c #{remote_file}.#{zip_ext} > #{remote_file}"
-  #     run "mysql -u#{db['username']} #{pass_str} #{db['database']} < #{remote_file}"
-  #     run "rm -f #{remote_file}"
-  #   end
-  # end
-  #
-  # desc <<-DESC
-  #   [capistrano-extensions]: Backs up target deployable environment's database (identified
-  #   by the FROM environment variable, which defaults to 'production') and restores it to
-  #   the remote database identified by the TO environment variable, which defaults to "staging."
-  # DESC
-  # task :sync_db do
-  #   system("capistrano-extensions-sync-db #{ENV['FROM'] || 'production'} #{ENV['TO'] || 'development'}")
-  # end
-end
-
 namespace :local do
   desc <<-DESC
     [capistrano-extensions]: Backs up deployable environment's database (identified by the
@@ -56,12 +9,12 @@ namespace :local do
     # sort by last alphabetically (forcing the most recent timestamp to the top)
     files = retrieve_local_files(from, 'db')
 
+    generate_remote_db_backup unless server_cache_valid?(db_backup_zip_file)
     timestamp = most_recent_local_backup(from, 'db')
     should_redownload = !(most_recent_local_backup(from, 'db') == last_mod_time(db_backup_zip_file))
 
-    if should_redownload
+    if should_redownload || last_mod_time(db_backup_zip_file) == 0
       # pull it from the server
-      generate_remote_db_backup unless server_cache_valid?(db_backup_zip_file)
       system "mkdir -p #{tmp_dir}"
       download(db_backup_zip_file, "#{local_db_backup_file(:env=>from, :timestamp=>last_mod_time(db_backup_zip_file))}.#{zip_ext}", :via=> :scp) do|ch, name, sent, total|
         print "\r\033[1;42m  #{File.basename(name)}: #{sent}/#{total} -- #{(sent.to_f * 100 / total.to_f).to_i}% \033[0m"

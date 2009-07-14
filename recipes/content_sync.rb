@@ -1,42 +1,3 @@
-namespace :remote do
-  # desc <<-DESC
-  #   [capistrano-extensions]: Uploads the backup file downloaded from local:backup_content (specified via the
-  #   FROM env variable), copies it to the remote environment specified by RAILS_ENV, and unpacks it into the
-  #   shared/ directory.
-  # DESC
-  # task :restore_content do
-  #   from = ENV['FROM'] || 'production'
-  #
-  #   if deployable_environments.include?(rails_env.to_sym)
-  #     generate_remote_content_backup if store_remote_backups
-  #
-  #     local_backup_file = local_content_backup_dir(:timestamp => most_recent_local_backup(from, 'system'), :env => from) + ".tar.#{zip_ext}"
-  #     remote_dir        = "#{shared_path}/restore_#{from}_content"
-  #     remote_file       = "#{remote_dir}.tar.#{zip_ext}"
-  #
-  #     if !File.exists?(local_backup_file)
-  #       puts "Could not find backup file: #{local_backup_file}"
-  #       exit 1
-  #     end
-  #
-  #     upload(local_backup_file, "#{remote_file}", :via=> :scp) do|ch, name, sent, total|
-  #       print "\r#{File.basename(name)}: #{sent}/#{total} -- #{(sent.to_f * 100 / total.to_f).to_i}%"
-  #     end
-  #     remote_dirs = [content_dir] + shared_content.keys
-  #
-  #     run("cd #{shared_path} && rm -rf #{remote_dirs.join(' ')} && tar xzf #{remote_file} -C #{shared_path}/")
-  #   end
-  # end
-  #
-  # desc <<-DESC
-  #   [capistrano-extensions]: Backs up remote server's shared content and restores it to a separate remote server.
-  #   $> cap remote:sync_content FROM=production TO=staging
-  # DESC
-  # task :sync_content do
-  #   system("capistrano-extensions-sync-content #{ENV['FROM'] || 'production'} #{ENV['TO'] || 'development'}")
-  # end
-end
-
 namespace :local do
 
   desc <<-DESC
@@ -48,10 +9,11 @@ namespace :local do
 
     # sort by last alphabetically (forcing the most recent timestamp to the top)
     files = retrieve_local_files('production', 'content')
+    generate_remote_content_backup unless server_cache_valid?(content_backup_file)
 
     timestamp = most_recent_local_backup(from, 'content')
     should_redownload = !(most_recent_local_backup(from, 'content') == last_mod_time(content_backup_file))
-    if should_redownload
+    if should_redownload || last_mod_time(content_backup_file) == 0
       # pull it from the server
       generate_remote_content_backup unless server_cache_valid?(content_backup_file)
       system("mkdir -p #{tmp_dir}")
@@ -106,6 +68,5 @@ def content_backup_file(env='production')
 end
 
 def generate_remote_content_backup
-  folders = [content_dir] + shared_content.keys
   run "cd #{shared_path} && tar czf #{content_backup_file} 'system'"
 end
