@@ -100,6 +100,7 @@ def generate_remote_db_backup
 
   db = YAML.load_file(local_db_conf(from))[from]
   pass_str = pluck_pass_str(db)
+  # TODO handle port/host alternatives.
   run "mysqldump --add-drop-database -u#{db['username']} #{pass_str} #{db['database']} > #{db_backup_file}"
   run "rm -f #{db_backup_zip_file} && #{zip} #{db_backup_file} && rm -f #{db_backup_file}"
 end
