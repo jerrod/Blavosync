@@ -1,3 +1,5 @@
+BLAVOSYNC
+
 adds the following tasks to projects using capistrano
 
 ------------------------------------------------------------
@@ -10,7 +12,7 @@ the local filesystem.
 ------------------------------------------------------------
 cap local:backup_db
 ------------------------------------------------------------
-Backs up deployable environment's database (identified by the
+Backs up deployable environment's database (idgit loentified by the
 RAILS_ENV environment variable, which defaults to 'production') and copies it to
 the local machine
 
