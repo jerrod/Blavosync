@@ -1,0 +1,72 @@
+adds the following tasks to projects using capistrano
+
+------------------------------------------------------------
+cap local:backup_content
+------------------------------------------------------------
+Downloads a tarball of shared content (identified by the :shared_content and
+:content_directories properties) from a deployable environment (RAILS_ENV) to
+the local filesystem.
+
+------------------------------------------------------------
+cap local:backup_db
+------------------------------------------------------------
+Backs up deployable environment's database (identified by the
+RAILS_ENV environment variable, which defaults to 'production') and copies it to
+the local machine
+
+------------------------------------------------------------
+cap local:force_backup_content
+------------------------------------------------------------
+Regenerate files.
+
+------------------------------------------------------------
+cap local:force_backup_db
+------------------------------------------------------------
+Regenerate files.
+
+------------------------------------------------------------
+cap local:restore_content
+------------------------------------------------------------
+Restores the backed up content (env var FROM specifies which environment
+was backed up, defaults to RAILS_ENV) to the local development environment app
+
+------------------------------------------------------------
+cap local:restore_db
+------------------------------------------------------------
+Untars the backup file downloaded from local:backup_db (specified via the FROM
+env
+variable, which defalts to RAILS_ENV), and imports (via mysql command line tool)
+it back into the database
+defined in the RESTORE_ENV env variable (defaults to development).
+
+------------------------------------------------------------
+cap local:resync_db
+------------------------------------------------------------
+Ensure that a fresh remote data dump is retrieved before syncing to the local
+environment
+
+------------------------------------------------------------
+cap local:sync
+------------------------------------------------------------
+Wrapper for local:sync_db and local:sync_content
+$> cap local:sync RAILS_ENV=production RESTORE_ENV=development
+
+------------------------------------------------------------
+cap local:sync_content
+------------------------------------------------------------
+Wrapper for local:backup_content and local:restore_content
+$> cap local:sync_content RAILS_ENV=production RESTORE_ENV=development
+
+------------------------------------------------------------
+cap local:sync_db
+------------------------------------------------------------
+Wrapper for local:backup_db and local:restore_db.
+$> cap local:sync_db RAILS_ENV=production RESTORE_ENV=development
+
+------------------------------------------------------------
+cap local:sync_init
+------------------------------------------------------------
+Wrapper for local:force_backup_db, local:force_backup_content, and the
+local:sync to get
+a completely fresh set of data from the server
+$> cap local:sync RAILS_ENV=production RESTORE_ENV=development
