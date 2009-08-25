@@ -26,57 +26,39 @@ def remote_backup_expires
  172800
 end
 
-def store_remote_backups
-  true
-end
-
-def exclude_paths
-  []
-end
-
 def zip
-   "gzip"
+  "gzip"
 end
+
 def unzip
-   "gunzip"
+  "gunzip"
 end
+
 def zip_ext
-   "gz"
+  "gz"
 end
 
 def tmp_dir
-"tmp/cap"
+  "tmp/cap"
 end
 
 def local_db_conf(env = nil)
-env ||= fetch(:rails_env)
-fetch(:config_structure, :rails).to_sym == :sls ?
-  File.join('config', env.to_s, 'database.yml') :
-  File.join('config', 'database.yml')
+  env ||= fetch(:rails_env)
+  fetch(:config_structure, :rails).to_sym == :sls ?
+    File.join('config', env.to_s, 'database.yml') :
+    File.join('config', 'database.yml')
 end
 
 def pluck_pass_str(db_config)
-pass_str = db_config['password']
-if !pass_str.nil?
-  pass_str = "-p'#{pass_str}'"
-end
-pass_str || ''
+  pass_str = db_config['password']
+  if !pass_str.nil?
+    pass_str = "-p'#{pass_str}'"
+  end
+  pass_str || ''
 end
 
 def current_timestamp
-  @current_timestamp ||= Time.now.to_i
-end
-
-def local_db_backup_file(args = {})
-  env = args[:env] || 'production'
-  timestamp = args[:timestamp] || current_timestamp
-  "#{tmp_dir}/#{application}-#{env}-db-#{timestamp}.sql"
-end
-
-def local_content_backup_dir(args={})
-  env = args[:env] || 'production'
-  timestamp = args[:timestamp] || current_timestamp
-  "#{tmp_dir}/#{application}-#{env}-content-#{timestamp}"
+  @current_timestamp ||= Time.now.to_i.to_s.strip
 end
 
 def retrieve_local_files(env, type)
@@ -87,9 +69,16 @@ def most_recent_local_backup(env, type)
   retrieve_local_files(env, type).first.to_i
 end
 
+def from_env
+  'production'
+end
+
+def to_env
+ 'development'
+end
 
 def last_mod_time(path)
-  capture("stat -c%Y #{path}").to_i
+  capture("stat -c%Y #{path}")
 end
 
 def server_cache_valid?(path)
@@ -111,14 +100,27 @@ namespace :util do
       system("rm -f #{tmp_dir}/#{application}-#{rails_env}*")
     end
 
-    # desc "Removes all but a single backup from :tmp_dir"
-    # task :clean do
-    #
-    # end
-    #
-    # desc "Removes all tmp files from :tmp_dir"
-    # task :remove do
-    #
-    # end
+  end
+end
+
+namespace :local do
+  desc <<-DESC
+    Wrapper for local:sync_db and local:sync_content
+    $> cap local:sync RAILS_ENV=production RESTORE_ENV=development
+  DESC
+  task :sync do
+    sync_db
+    sync_content
+  end
+
+  desc <<-DESC
+    Wrapper for local:force_backup_db, local:force_backup_content, and the local:sync to get
+    a completely fresh set of data from the server
+    $> cap local:sync RAILS_ENV=production RESTORE_ENV=development
+  DESC
+  task :sync_init do
+    force_backup_db
+    force_backup_content
+    sync
   end
 end
