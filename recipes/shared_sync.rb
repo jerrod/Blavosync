@@ -23,7 +23,7 @@ def store_dev_backups
 end
 
 def remote_backup_expires
- 172800
+ 100
 end
 
 def zip
@@ -112,9 +112,9 @@ namespace :local do
     sync_db
     sync_content
   end
-
+  
   desc <<-DESC
-    Wrapper for local:force_backup_db, local:force_backup_content, and the local:sync to get
+    Wrapper for local:force_backup_db, local:force_backup_content, and the local:sync to get 
     a completely fresh set of data from the server
     $> cap local:sync RAILS_ENV=production RESTORE_ENV=development
   DESC
@@ -122,5 +122,5 @@ namespace :local do
     force_backup_db
     force_backup_content
     sync
-  end
+  end 
 end
