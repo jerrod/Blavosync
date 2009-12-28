@@ -1,47 +1,21 @@
-def rails_env
-   ENV['RAILS_ENV'].nil? ? 'development' : ENV['RAILS_ENV']
-end
+set :rails_env,    (ENV['RAILS_ENV'].nil? ? 'development' : ENV['RAILS_ENV'])
+set :rails_root,   Pathname.new('.').realpath
+set :content_dir,  (content_directories ||= "system")
+set :content_path, File.join(shared_path, content_dir)
+set :public_path,  File.join(latest_release, 'public')
+set :remote_backup_expires, 100000
+set :zip,      "gzip"
+set :unzip,    "gunzip"
+set :zip_ext,  "gz"
+set :tmp_dir,  "tmp"
+set :content_sync_method, ( sync_method ||= 'rsync')
+set :from_env, 'production'
+set :to_env,   'development'
+set :rsync_content_backup_file,  "#{shared_path}/system"
+set :tar_content_backup_file, "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"
 
-def content_dir
-  "system"
-end
-
-def content_path
-  File.join(shared_path, content_dir)
-end
-
-def public_path
-  File.join(latest_release, 'public')
-end
-
-def log_path
-  "/var/log/#{application}"
-end
-
-def store_dev_backups
- false
-end
-
-def remote_backup_expires
- 100
-end
-
-def zip
-  "gzip"
-end
-
-def unzip
-  "gunzip"
-end
-
-def zip_ext
-  "gz"
-end
-
-def tmp_dir
-  "tmp/cap"
-end
-
+set :db_backup_file, "#{shared_path}/backup_#{from_env}_db.sql"
+set :db_backup_zip_file, "#{db_backup_file}.#{zip_ext}"
 def local_db_conf(env = nil)
   env ||= fetch(:rails_env)
   fetch(:config_structure, :rails).to_sym == :sls ?
@@ -50,11 +24,7 @@ def local_db_conf(env = nil)
 end
 
 def pluck_pass_str(db_config)
-  pass_str = db_config['password']
-  if !pass_str.nil?
-    pass_str = "-p'#{pass_str}'"
-  end
-  pass_str || ''
+   db_config['password'].nil? ? '' : "-p'#{db_config['password']}'"
 end
 
 def current_timestamp
@@ -69,20 +39,12 @@ def most_recent_local_backup(env, type)
   retrieve_local_files(env, type).first.to_i
 end
 
-def from_env
-  'production'
-end
-
-def to_env
- 'development'
-end
-
 def last_mod_time(path)
   capture("stat -c%Y #{path}")
 end
 
 def server_cache_valid?(path)
-  capture("[ -f #{path} ] || echo '1'").empty? && ((Time.now.to_i - last_mod_time(path)) <= remote_backup_expires) # two days in seconds
+  capture("[ -f #{path} ] || echo '1'").empty? && ((Time.now.to_i - last_mod_time(path)) <= remote_backup_expires)
 end
 
 namespace :util do
@@ -97,7 +59,7 @@ namespace :util do
 
     desc "[capistrano-extensions]: Remove the current remote env's backups from :tmp_dir"
     task :clean_remote do
-      system("rm -f #{tmp_dir}/#{application}-#{rails_env}*")
+      system("rm -rf #{rails_root}/#{tmp_dir}/#{fetch(:application)}-*")
     end
 
   end
@@ -110,11 +72,9 @@ namespace :local do
   DESC
   task :sync do
     sync_db
-    if ENV['SYNC_METHOD'] = 'tar'
-      puts "sync_content"
+    if content_sync_method == 'tar'
       sync_content
     else
-      puts "ARRsync_content"
       rsync_content
     end
   end
@@ -129,4 +89,8 @@ namespace :local do
     force_backup_content
     sync
   end 
+  
+  task :test_root do
+    puts "RAILS_ROOT #{rails_root}"
+  end
 end

@@ -65,10 +65,7 @@ def local_content_backup_dir(args={})
   "#{tmp_dir}/#{application}-#{from_env}-content-#{timestamp.to_s.strip}"
 end
 
-def content_backup_file()
-  "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"
-end
 
 def generate_remote_content_backup
-  run "cd #{shared_path} && tar czf #{content_backup_file} 'system'"
+  run "cd #{shared_path} && tar czf #{tar_content_backup_file} 'system'"
 end

@@ -75,13 +75,6 @@ namespace :local do
 
 end
 
-def db_backup_file
-  "#{shared_path}/backup_#{from_env}_db.sql"
-end
-
-def db_backup_zip_file
-  "#{db_backup_file}.#{zip_ext}"
-end
 
 def generate_remote_db_backup
   run "mysqldump  #{mysql_connection_for(from_env)} > #{db_backup_file}"

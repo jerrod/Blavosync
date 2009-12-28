@@ -6,7 +6,7 @@ namespace :local do
   DESC
   task :rsync_content do
     from = ENV['FROM'] || 'production'
-    system("rsync -avz -e ssh '#{user}@#{domain}:#{content_path}' '#{LOCAL_RAILS_ROOT}/tmp/'")
+    system("rsync -avz -e ssh '#{user}@#{domain}:#{content_path}' '#{rails_root}/tmp/'")
   end
 
   desc <<-DESC
@@ -15,7 +15,7 @@ namespace :local do
   task :rsync_restore_content do
     # from = ENV['FROM'] || 'production'
     print "\033[1;45m Linking Assets to public directory \033[0m\n"
-    system "ln -nfs #{LOCAL_RAILS_ROOT}/tmp/system #{LOCAL_RAILS_ROOT}/public/system"
+    system "ln -nfs #{rails_root}/tmp/system #{rails_root}/public/system"
   end
 
 
@@ -31,10 +31,7 @@ namespace :local do
   end
 end
 
-def content_backup_file(env='production')
-  "#{shared_path}/system"
-end
 
 def generate_remote_content_backup
-  run "cd #{shared_path} && tar czf #{content_backup_file} 'system'"
+  run "cd #{shared_path} && tar czf #{rsync_content_backup_file} 'system'"
 end
