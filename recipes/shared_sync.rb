@@ -1,23 +1,23 @@
-set :rails_env,    (ENV['RAILS_ENV'].nil? ? 'development' : ENV['RAILS_ENV'])
-set :rails_root,   Pathname.new('.').realpath
-set :content_dir,  (content_directories ||= "system")
-set :content_path, File.join(shared_path, content_dir)
-set :public_path,  File.join(latest_release, 'public')
-set :remote_backup_expires, 100000
-set :zip,      "gzip"
-set :unzip,    "gunzip"
-set :zip_ext,  "gz"
-set :tmp_dir,  "tmp"
-set :content_sync_method, ( sync_method ||= 'rsync')
-set :from_env, 'production'
-set :to_env,   'development'
-set :rsync_content_backup_file,  "#{shared_path}/system"
-set :tar_content_backup_file, "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"
+set :rails_root,                fetch(:blavosync_local_root,                Pathname.new('.').realpath                                   )
+set :content_dir,               fetch(:blavosync_content_directories,       content_directories ||= "system"                             )
+set :content_path,              fetch(:blavosync_content_path,              File.join(shared_path, content_dir)                          )
+set :public_path,               fetch(:blavosync_public_path,               File.join(latest_release, 'public')                          )
+set :remote_backup_expires,     fetch(:blavosync_remote_backup_expires,     100000                                                       )
+set :zip,                       fetch(:blavosync_zip_command,               "gzip"                                                       )
+set :unzip,                     fetch(:blavosync_unzip_command,             "gunzip"                                                     )
+set :zip_ext,                   fetch(:blavosync_compressed_extension,      "gz"                                                         )
+set :tmp_dir,                   fetch(:blavosync_tmp_dir,                   "tmp"                                                        )
+set :content_sync_method,       fetch(:blavosync_content_sync_method,       'rsync'                                                      )
+set :from_env,                  fetch(:blavosync_from_env,                  (ENV['FROM_ENV'].nil? ? 'production' : ENV['RAILS_ENV'])     )
+set :to_env,                    fetch(:blavosync_to_env,                    (ENV['TO_ENV'].nil? ? 'development' : ENV['TO_ENV'])         )
+set :rsync_content_backup_file, fetch(:blavosync_rsync_content_backup_file, "#{shared_path}/system"                                      )
+set :tar_content_backup_file,   fetch(:blavosync_tar_content_backup_file,   "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"   )
+set :db_backup_file,            fetch(:blavosync_db_backup_file,            "#{shared_path}/backup_#{from_env}_db.sql"                   )
+set :db_backup_zip_file,        fetch(:blavosync_db_backup_zip_file,        "#{db_backup_file}.#{zip_ext}"                               )
 
-set :db_backup_file, "#{shared_path}/backup_#{from_env}_db.sql"
-set :db_backup_zip_file, "#{db_backup_file}.#{zip_ext}"
+
 def local_db_conf(env = nil)
-  env ||= fetch(:rails_env)
+  env ||= fetch(:to_env)
   fetch(:config_structure, :rails).to_sym == :sls ?
     File.join('config', env.to_s, 'database.yml') :
     File.join('config', 'database.yml')
