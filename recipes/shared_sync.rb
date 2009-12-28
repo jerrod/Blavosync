@@ -110,7 +110,13 @@ namespace :local do
   DESC
   task :sync do
     sync_db
-    sync_content
+    if ENV['SYNC_METHOD'] = 'tar'
+      puts "sync_content"
+      sync_content
+    else
+      puts "ARRsync_content"
+      rsync_content
+    end
   end
   
   desc <<-DESC
