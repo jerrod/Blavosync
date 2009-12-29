@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{Sync a remote db and rsync content to your development environment.}
     gem.description = %Q{Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually.}
     gem.email = "jerrodblavos@mac.com"
-    gem.homepage = "http://github.com/jerrod/Blavosync"
+    gem.homepage = "http://github.com/indierockmedia/Blavosync"
     gem.authors = ["jayronc"]
     gem.has_rdoc = false
     gem.require_path = 'recipes'
