@@ -14,14 +14,14 @@ Gem::Specification.new do |s|
   s.email = %q{jerrodblavos@mac.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.txt"
+     "README.markdown"
   ]
   s.files = [
     "Blavosync.gemspec",
      "History.txt",
      "LICENSE",
      "Manifest.txt",
-     "README.txt",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "lib/blavosync.rb",
