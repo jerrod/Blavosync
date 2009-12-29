@@ -6,7 +6,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       DESC
       task :rsync_content do
         from = ENV['FROM'] || 'production'
-        system("rsync -avz -e ssh '#{user}@#{domain}:#{content_path}' '#{rails_root}/tmp/'")
+        remote_domain = fetch(:domain, fetch(:rsync_domain))
+        system("rsync -avz -e ssh '#{user}@#{remote_domain}:#{content_path}' '#{rails_root}/tmp/'")
       end
 
       desc <<-DESC
