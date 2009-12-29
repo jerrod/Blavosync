@@ -17,57 +17,54 @@
 # 
 Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
-def rails_root
-  Pathname.new('.').realpath
-end
-def content_dir                                                
-  "system"                                                     
-end
-def content_path                                               
-  File.join(fetch(:shared_path), content_dir)                 
-end                                              
-def public_path                                               
-  File.join(fetch(:latest_release), 'public')                 
-end
-def remote_backup_expires                                      
-  100000                                                       
-end
-def zip                                                        
-  "gzip"                                                       
-end
-def unzip                                                      
-  "gunzip"                                                     
-end
-def zip_ext                                                    
-  "gz"                                                         
-end
-def tmp_dir                                                  
-  "tmp"                                                        
-end
-def content_sync_method                                      
-  'rsync'                                                      
-end
-def from_env                                                  
-  (ENV['FROM_ENV'].nil? ? 'production' : ENV['RAILS_ENV'])     
-end
-def to_env                                                  
-  (ENV['TO_ENV'].nil? ? 'development' : ENV['TO_ENV'])         
-end
-def rsync_content_backup_file                                  
-  "#{shared_path}/system"                                      
-end
-def tar_content_backup_file                                   
-  "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"   
-end
-def db_backup_file                                           
-  "#{shared_path}/backup_#{from_env}_db.sql"                   
-end
-def db_backup_zip_file                                        
-  "#{db_backup_file}.#{zip_ext}"                               
-end
-
-
-
+  def rails_root
+    Pathname.new('.').realpath
+  end
+  def content_dir                                                
+    "system"                                                     
+  end
+  def content_path                                               
+    File.join(fetch(:shared_path), content_dir)                 
+  end                                              
+  def public_path                                               
+    File.join(fetch(:latest_release), 'public')                 
+  end
+  def remote_backup_expires                                      
+    100000                                                       
+  end
+  def zip                                                        
+    "gzip"                                                       
+  end
+  def unzip                                                      
+    "gunzip"                                                     
+  end
+  def zip_ext                                                    
+    "gz"                                                         
+  end
+  def tmp_dir                                                  
+    "tmp"                                                        
+  end
+  def content_sync_method                                      
+    'rsync'                                                      
+  end
+  def from_env                                                  
+    (ENV['FROM_ENV'].nil? ? 'production' : ENV['RAILS_ENV'])     
+  end
+  def to_env                                                  
+    (ENV['TO_ENV'].nil? ? 'development' : ENV['TO_ENV'])         
+  end
+  def rsync_content_backup_file                                  
+    "#{shared_path}/system"                                      
+  end
+  def tar_content_backup_file                                   
+    "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"   
+  end
+  def db_backup_file                                           
+    "#{shared_path}/backup_#{from_env}_db.sql"                   
+  end
+  def db_backup_zip_file                                        
+    "#{db_backup_file}.#{zip_ext}"                               
+  end
  
   def local_content_backup_dir(args={})
     timestamp = args[:timestamp] || current_timestamp
@@ -102,7 +99,7 @@ end
   end
   
   def last_mod_time(path)
-    capture("stat -c%Y #{path}")
+    capture("stat -c%Y #{path}") rescue 0
   end
   
   def server_cache_valid?(path)
