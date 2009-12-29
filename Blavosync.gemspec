@@ -17,8 +17,14 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    "VERSION",
+    "Blavosync.gemspec",
+     "LICENSE",
+     "README.rdoc",
+     "Rakefile",
+     "VERSION",
      "init.rb",
+     "lib/blavosync.rb",
+     "pkg/blavosync-0.0.0.pre1.gem",
      "recipes/content_rsync.rb",
      "recipes/content_sync.rb",
      "recipes/db_sync.rb",
