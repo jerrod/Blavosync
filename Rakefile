@@ -11,7 +11,6 @@ begin
     gem.homepage = "http://github.com/indierockmedia/Blavosync"
     gem.authors = ["jayronc"]
     gem.has_rdoc = false
-    gem.require_path = 'recipes'
 
   end
   Jeweler::GemcutterTasks.new
@@ -51,6 +50,5 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "blavosync #{version}"
   rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('recipes/**/*.rb')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

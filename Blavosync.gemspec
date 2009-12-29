@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blavosync}
-  s.version = "0.0.2"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["jayronc"]
@@ -26,15 +26,11 @@ Gem::Specification.new do |s|
      "lib/blavosync.rb",
      "pkg/blavosync-0.0.0.pre1.gem",
      "pkg/blavosync-0.0.1.gem",
-     "pkg/blavosync-0.0.2.gem",
-     "recipes/content_rsync.rb",
-     "recipes/content_sync.rb",
-     "recipes/db_sync.rb",
-     "recipes/shared_sync.rb"
+     "pkg/blavosync-0.0.2.gem"
   ]
   s.homepage = %q{http://github.com/indierockmedia/Blavosync}
   s.rdoc_options = ["--charset=UTF-8"]
-  s.require_paths = ["recipes"]
+  s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Sync a remote db and rsync content to your development environment.}
 
