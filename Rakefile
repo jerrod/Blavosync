@@ -1,54 +1,34 @@
 require 'rubygems'
-require 'rake'
+require 'hoe'
+require './lib/blavosync'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "blavosync"
-    gem.summary = %Q{Sync a remote db and rsync content to your development environment.}
-    gem.description = %Q{Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually.}
-    gem.email = "jerrodblavos@mac.com"
-    gem.homepage = "http://github.com/indierockmedia/Blavosync"
-    gem.authors = ["jayronc"]
-    gem.has_rdoc = false
-
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+Hoe.spec('blavosync') do |p|
+  p.author = 'Jerrod Blavos'
+  p.email = 'jerrodblavos@mac.com'
+  p.summary = %Q{Sync a remote db and rsync content to your development environment.}
+  p.description = %Q{Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually.}
+  p.url = "http://github.com/indierockmedia/Blavosync"
+  p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
+  p.extra_deps << ['capistrano', '>= 2.2.0']
+  p.version = Blavosync::VERSION
 end
 
-
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test' << 'recipes'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+desc "Open an irb session preloaded with this library"
+task :console do
+  sh "irb -rubygems -r ./lib/blavosync.rb"
 end
 
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test' << 'recipes'
-    test.pattern = 'test/**/test_*.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
+task :coverage do
+  system("rm -fr coverage")
+  system("rcov test/test_*.rb")
+  system("open coverage/index.html")
 end
 
-task :test => :check_dependencies
+desc "Upload site to Rubyforge"
+task :site do
+end
 
-task :default => :test
-
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "blavosync #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+desc 'Install the package as a gem.'
+task :install_gem_no_doc => [:clean, :package] do
+  sh "#{'sudo ' unless Hoe::WINDOZE}gem install --local --no-rdoc --no-ri pkg/*.gem"
 end
