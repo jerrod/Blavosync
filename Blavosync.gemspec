@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/jerrod/Blavosync}
   s.rdoc_options = ["--charset=UTF-8"]
-  s.require_paths = [["/Users/jerrod/Sites/git-kungfunation/vendor/plugins/Blavosync/recipes/content_rsync.rb", "/Users/jerrod/Sites/git-kungfunation/vendor/plugins/Blavosync/recipes/content_sync.rb", "/Users/jerrod/Sites/git-kungfunation/vendor/plugins/Blavosync/recipes/db_sync.rb", "/Users/jerrod/Sites/git-kungfunation/vendor/plugins/Blavosync/recipes/shared_sync.rb"]]
+  s.require_paths = ["recipes"]
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Sync a remote db and rsync content to your development environment.}
 

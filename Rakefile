@@ -11,7 +11,7 @@ begin
     gem.homepage = "http://github.com/jerrod/Blavosync"
     gem.authors = ["jayronc"]
     gem.has_rdoc = false
-    gem.require_path = Dir[File.join(File.dirname(__FILE__), 'recipes/**/*.rb')]
+    gem.require_path = 'recipes'
 
   end
   Jeweler::GemcutterTasks.new
