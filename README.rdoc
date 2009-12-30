@@ -36,6 +36,8 @@ If you are on OSX you may need to enable FollowSymLinks in your virtualhost entr
 
 == Usage
 
+    sudo gem install blavosync -s http://gemcutter.org
+
 Adds the following tasks to projects using capistrano.
 
 === cap local:sync
