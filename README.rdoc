@@ -1,0 +1,70 @@
+= BlavoSync
+
+== DEPENDENCIES
+
+* Capistrano2 (http://github.com/jamis/capistrano)
+
+== Requirements
+
+* A reason to have your production stuff on your development machine.
+* A production server running mysql and sshd.
+* A valid $RAILS_ROOT/config/database.yml file with entries for both production and development.
+* The latest capistrano2 and a valid $RAILS_ROOT/config/deploy.rb file with either a :domain or :rsync domain entry.
+* The blavosync rubygem, available at http://gemcutter.org (sudo gem install blavosync).
+* Hopefully you already have a nice little app running somewhere that has some decent data and assets. In your $RAILS_ROOT/config/deploy.rb file add this line to the top:
+
+    require "blavosync/recipes"
+
+In addition, ensure that you have an entry either for :domain or :rsync_domain like so:
+
+    set :domain, "my.awesomedomain.com"
+
+or if you are using some custom deployment location:
+
+    set :rsync_domain, "my.awesomedomain.com"
+
+This covers the basic requirements, on to usage.  As long as your $RAILS_ROOT/config/deploy.rb file is working, the only action you need to take is to run the following on your local machine.
+
+    cap local:sync
+
+This will dump the production database and load it into your local mysql database, defined in your $RAILS_ROOT/config/database.yml, and then rsync anything in your $RAILS_ROOT/shared/system directory on production into your $RAILS_ROOT/tmp directory in a new system directory. Once this is done, the $RAILS_ROOT/tmp/system directory will be symlinked into $RAILS_ROOT/public/system.
+
+There are some considerations you should take before using this tool, such as do you have enough disk space or bandwidth to pull down all the assets. You may already have a $RAILS_ROOT/public/system directory full of assets, in which case if you want to keep those you should back them up somewhere and delete the system directory, otherwise the symlink may not work.
+
+If you are on OSX you may need to enable FollowSymLinks in your virtualhost entry for these assets to be served by apache.
+
+== USAGE
+
+adds the following tasks to projects using capistrano
+
+=== cap local:sync
+
+Wrapper for local:sync_db and local:sync\_content
+$> cap local:sync
+
+=== cap local:rsync
+
+Wrapper for local:rsync_content and local:rsync\_restore\_content
+$> cap local:sync_content
+
+=== cap local:sync_db
+
+Wrapper for local:backup_db and local:restore\_db.
+$> cap local:sync_db
+
+
+For subcommands try cap -T local
+
+==== Note on Patches/Pull Requests
+ 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+===== Copyright
+
+Copyright (c) 2009 jayronc. See LICENSE for details.
