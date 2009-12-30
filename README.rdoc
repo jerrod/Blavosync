@@ -50,7 +50,7 @@ Wrapper for *local:backup_db* and *local:restore\_db*.
 
 For subcommands try 
 
-    cap -T local+
+    cap -T local
 
 ==== Note on Patches/Pull Requests
  
