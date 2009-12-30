@@ -1,6 +1,6 @@
 = BlavoSync
 
-== DEPENDENCIES
+== Dependencies
 
 * Capistrano2 (http://github.com/jamis/capistrano)
 
@@ -34,7 +34,7 @@ There are some considerations you should take before using this tool, such as do
 
 If you are on OSX you may need to enable FollowSymLinks in your virtualhost entry for these assets to be served by apache.
 
-== USAGE
+== Usage
 
 Adds the following tasks to projects using capistrano.
 
