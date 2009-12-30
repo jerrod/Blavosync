@@ -11,7 +11,8 @@
 * A valid $RAILS_ROOT/config/database.yml file with entries for both production and development.
 * The latest capistrano2 and a valid $RAILS_ROOT/config/deploy.rb file with either a :domain or :rsync domain entry.
 * The blavosync rubygem, available at http://gemcutter.org (sudo gem install blavosync).
-* Hopefully you already have a nice little app running somewhere that has some decent data and assets. In your $RAILS_ROOT/config/deploy.rb file add this line to the top:
+
+Hopefully you already have a nice little app running somewhere that has some decent data and assets. In your $RAILS_ROOT/config/deploy.rb file add this line to the top:
 
     require "blavosync/recipes"
 
