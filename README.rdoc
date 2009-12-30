@@ -36,25 +36,21 @@ If you are on OSX you may need to enable FollowSymLinks in your virtualhost entr
 
 == USAGE
 
-adds the following tasks to projects using capistrano
+Adds the following tasks to projects using capistrano.
 
 === cap local:sync
-
-Wrapper for +local:sync_db+ and +local:sync\_content+
-$> cap local:sync
+Wrapper for *local:sync_db* and *local:sync\_content*.
 
 === cap local:rsync
-
-Wrapper for +local:rsync_content+ and +local:rsync\_restore\_content+
-$> cap local:sync_content
+Wrapper for *local:rsync_content* and *local:rsync\_restore\_content*.
 
 === cap local:sync_db
-
-Wrapper for +local:backup_db+ and +local:restore\_db+.
-$> cap local:sync_db
+Wrapper for *local:backup_db* and *local:restore\_db*.
 
 
-For subcommands try +cap -T local+
+For subcommands try 
+
+    cap -T local+
 
 ==== Note on Patches/Pull Requests
  
