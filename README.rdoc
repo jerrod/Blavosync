@@ -49,6 +49,9 @@ Wrapper for *local:rsync_content* and *local:rsync\_restore\_content*.
 === cap local:sync_db
 Wrapper for *local:backup_db* and *local:restore\_db*.
 
+== Variables
+
+  set :content_directory, 'not_system_because_i_roll_non_standard_style'
 
 For subcommands try 
 

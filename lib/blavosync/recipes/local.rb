@@ -21,7 +21,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     Pathname.new('.').realpath
   end
   def content_dir                                                
-    "system"                                                     
+    exists?(:content_directory) ? fetch(:content_directory) : "system"                                                     
   end
   def content_path                                               
     File.join(fetch(:shared_path), content_dir)                 
@@ -45,7 +45,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     "tmp"                                                        
   end
   def content_sync_method                                      
-    'rsync'                                                      
+    exists?(:sync_method) ? sync_method : 'rsync'                                                      
   end
   def from_env                                                  
     (ENV['FROM_ENV'].nil? ? 'production' : ENV['RAILS_ENV'])     
@@ -53,8 +53,8 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   def to_env                                                  
     (ENV['TO_ENV'].nil? ? 'development' : ENV['TO_ENV'])         
   end
-  def rsync_content_backup_file                                  
-    "#{shared_path}/system"                                      
+  def rsync_content_backup_file 
+    "#{shared_path}/#{content_dir}"  
   end
   def tar_content_backup_file                                   
     "#{shared_path}/backup_#{from_env}_content.tar.#{zip_ext}"   

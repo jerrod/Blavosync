@@ -1,2 +1,0 @@
-== 0.4.12 / 2009-12-29
-  * attempting to build a gem that works with EY-solo
