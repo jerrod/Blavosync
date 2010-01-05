@@ -102,10 +102,6 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     capture("stat -c%Y #{path}") rescue 0
   end
   
-  def server_cache_valid?(path)
-    capture("[ -f #{path} ] || echo '1'").empty? && ((Time.now.to_i - last_mod_time(path)) <= remote_backup_expires)
-  end
-  
   def generate_remote_db_backup
     run "mysqldump  #{mysql_connection_for(from_env)} > #{db_backup_file}"
     run "rm -f #{db_backup_zip_file} && #{zip} #{db_backup_file} && rm -f #{db_backup_file}"

@@ -6,31 +6,12 @@ Capistrano::Configuration.instance(:must_exist).load do
       RAILS_ENV environment variable, which defaults to 'production') and copies it to the local machine
     DESC
     task :backup_db, :roles => :db do
-      files = retrieve_local_files(from_env, 'db')
-      timestamp = most_recent_local_backup(from_env, 'db').to_i
-      last_modified = last_mod_time(db_backup_zip_file).to_i
-
-      if last_modified < (Time.now.to_i - (remote_backup_expires))
-        generate_remote_db_backup
-        should_redownload = true
-      end
-      should_redownload = !(timestamp == last_modified)
-      if should_redownload
-        system "mkdir -p #{tmp_dir}"
-        download(db_backup_zip_file, "#{local_db_backup_file(:env=>from_env, :timestamp=>last_modified)}.#{zip_ext}", :via=> :scp) do|ch, name, sent, total|
-          print "\r\033[1;42m  #{File.basename(name)}: #{sent}/#{total} -- #{(sent.to_f * 100 / total.to_f).to_i}% \033[0m"
-        end
-      else
-        print "\r\033[1;42m Your Files are already up-to-date \033[0m\n"
-        @current_timestamp = files.first.to_i
-      end
-    end
-
-    desc <<-DESC
-      Regenerate files.
-    DESC
-    task :force_backup_db do
+      last_modified = Time.now.to_i
       generate_remote_db_backup
+      system "mkdir -p #{tmp_dir}"
+      download(db_backup_zip_file, "#{local_db_backup_file(:env=>from_env, :timestamp=>last_modified)}.#{zip_ext}", :via=> :scp) do|ch, name, sent, total|
+        print "\r\033[1;42m  #{File.basename(name)}: #{sent}/#{total} -- #{(sent.to_f * 100 / total.to_f).to_i}% \033[0m"
+      end
     end
 
     desc <<-DESC
@@ -53,7 +34,6 @@ Capistrano::Configuration.instance(:must_exist).load do
         rm -f #{remote_backup_file}
       CMD
       system(cmd.strip)
-      util::tmp::check
     end
 
     desc <<-DESC
@@ -65,14 +45,6 @@ Capistrano::Configuration.instance(:must_exist).load do
         backup_db
         restore_db
       end
-    end
-
-    desc <<-DESC
-      Ensure that a fresh remote data dump is retrieved before syncing to the local environment.
-    DESC
-    task :resync_db do
-      util::tmp::clean_remote
-      sync_db
     end
   end
 
