@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blavosync}
-  s.version = "0.3.1"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["jayronc"]
-  s.date = %q{2010-01-05}
+  s.date = %q{2010-03-19}
   s.description = %q{Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually.}
   s.email = %q{jerrodblavos@mac.com}
   s.extra_rdoc_files = [
