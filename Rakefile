@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake'
 
-begin
+# begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "blavosync"
@@ -14,9 +14,9 @@ begin
 
   end
   Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
+# rescue LoadError
+#   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+# end
 
 
 require 'rake/testtask'
@@ -39,11 +39,9 @@ rescue LoadError
   end
 end
 
-task :test => :check_dependencies
-
 task :default => :test
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 

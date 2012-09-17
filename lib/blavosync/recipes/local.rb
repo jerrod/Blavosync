@@ -125,7 +125,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
   def generate_remote_db_backup
     run "mysqldump --opt --no-data #{mysql_connection_for(from_env)} > #{db_schema_backup_file}"
-    run "mysqldump --no-create-info #{exlude_table_command} #{mysql_connection_for(from_env)} > #{db_backup_file}"
+    run "mysqldump --opt --no-create-info #{exlude_table_command} #{mysql_connection_for(from_env)} > #{db_backup_file}"
     run "rm -f #{db_backup_zip_file} && #{zip} #{db_backup_file} && rm -f #{db_backup_file}"
     run "rm -f #{db_schema_backup_zip_file} && #{zip} #{db_schema_backup_file} && rm -f #{db_schema_backup_file}"
   end
