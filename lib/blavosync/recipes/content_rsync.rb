@@ -15,8 +15,10 @@ Capistrano::Configuration.instance(:must_exist).load do
         if exists?(:user)
           remote_user =  fetch(:user)
         end
-        
-        system("rsync -avz -e ssh '#{[remote_user, remote_domain].join("@")}:#{content_path}' '#{rails_root}/tmp/'")
+        if exists?(:port)
+          remote_port =  "-p #{fetch(:user)}"
+        end
+        system("rsync -avz -e 'ssh #{remote_port}' '#{[remote_user, remote_domain].join("@")}:#{content_path}' '#{rails_root}/tmp/'")
       end
 
       desc <<-DESC
