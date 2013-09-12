@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{blavosync}
+  s.name = "blavosync"
   s.version = "0.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["jayronc"]
-  s.date = %q{2013-09-11}
-  s.description = %q{Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually.}
-  s.email = %q{jerrodblavos@mac.com}
+  s.date = "2013-09-12"
+  s.description = "Sync a remote db and rsync content to your development environment.  Useful for small teams and developers who are not able to do this manually."
+  s.email = "jerrodblavos@mac.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.rdoc"
@@ -36,18 +36,9 @@ Gem::Specification.new do |s|
     "test/test_blavosync.rb",
     "test/test_helper.rb"
   ]
-  s.homepage = %q{http://github.com/indierockmedia/Blavosync}
+  s.homepage = "http://github.com/indierockmedia/Blavosync"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.5.3}
-  s.summary = %q{Sync a remote db and rsync content to your development environment.}
-
-  if s.respond_to? :specification_version then
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-    else
-    end
-  else
-  end
+  s.rubygems_version = "2.0.3"
+  s.summary = "Sync a remote db and rsync content to your development environment."
 end
 
